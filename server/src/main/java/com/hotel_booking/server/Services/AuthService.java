@@ -1,6 +1,7 @@
 package com.hotel_booking.server.Services;
 
 
+import com.hotel_booking.server.Exceptions.UnauthorizedAccessException;
 import com.hotel_booking.server.Models.Enums.Role;
 import com.hotel_booking.server.Models.Types.AuthResponse;
 import com.hotel_booking.server.Models.Types.Login;
@@ -44,7 +45,9 @@ public class AuthService {
                         login.getPassword()
                 )
         );
-        User user = repo.findByUsername(login.getUsername()).orElse(null);
+        User user = repo.findByUsername(login.getUsername()).orElseThrow(
+                () -> new UnauthorizedAccessException("User not found")
+        );
         if(user == null){
             throw new UsernameNotFoundException("User not found");
         }

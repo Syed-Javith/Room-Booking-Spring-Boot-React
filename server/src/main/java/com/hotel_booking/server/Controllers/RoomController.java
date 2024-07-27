@@ -1,6 +1,7 @@
 package com.hotel_booking.server.Controllers;
 
 
+import com.hotel_booking.server.Exceptions.UnauthorizedAccessException;
 import com.hotel_booking.server.Models.Room;
 import com.hotel_booking.server.Models.Types.ProfileResponse;
 import com.hotel_booking.server.Models.User;
@@ -64,6 +65,8 @@ public class RoomController {
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        return userRepo.findByUsername(username).orElse(null);
+        return userRepo.findByUsername(username).orElseThrow(
+                () -> new UnauthorizedAccessException("User not found")
+        );
     }
 }

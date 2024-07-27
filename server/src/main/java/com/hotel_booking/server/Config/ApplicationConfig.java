@@ -1,6 +1,7 @@
 package com.hotel_booking.server.Config;
 
 
+import com.hotel_booking.server.Exceptions.UnauthorizedAccessException;
 import com.hotel_booking.server.Repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
@@ -21,8 +25,23 @@ public class ApplicationConfig {
     private final UserRepo repo;
 
     @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("*")
+                        .allowCredentials(true)
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
+            }
+        };
+    }
+
+    @Bean
     public UserDetailsService userDetailsService() {
-        return username -> repo.findByUsername(username).orElse(null);
+        return username -> repo.findByUsername(username).orElseThrow(
+                () -> new UnauthorizedAccessException("User not found")
+        );
     }
 
 
