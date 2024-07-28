@@ -72,7 +72,57 @@ public enum EmailContent {
             Best Regards,
             Hotel Booking Team
             """
-    );
+    ),
+    USER_DELETED_BY_ADMIN(
+        "Account Deletion Notification",
+                """
+        Dear [Guest Name],
+
+        We regret to inform you that your account has been deleted by an administrator. 
+        If you believe this is a mistake or have any questions, please contact our support team.
+
+        Best Regards,
+        Hotel Booking Team
+        """
+    ),
+    USER_DATA_UPDATED_BY_ADMIN(
+        "Account Information Updated",
+                """
+        Dear [Guest Name],
+
+        Your account information has been updated by an administrator. 
+        If you have any questions or did not request this change, please contact our support team.
+
+        Best Regards,
+        Hotel Booking Team
+        """
+    ),
+    USER_DATA_UPDATED_BY_SELF(
+        "Account Information Updated",
+                """
+        Dear [Guest Name],
+
+        Your account information has been successfully updated. 
+        If you did not make this change, please contact our support team immediately.
+
+        Best Regards,
+        Hotel Booking Team
+        """
+    ),
+    USER_ADDED_BY_ADMIN(
+        "Welcome to Our Hotel Booking Platform",
+                """
+        Dear [Guest Name],
+
+        An account has been created for you by an administrator. 
+        You can now log in using your email and the temporary password provided.
+
+        Best Regards,
+        Hotel Booking Team
+        """
+    )
+
+    ;
 
     private String subject;
     private String body;
