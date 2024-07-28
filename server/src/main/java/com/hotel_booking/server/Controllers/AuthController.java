@@ -1,11 +1,10 @@
 package com.hotel_booking.server.Controllers;
 
 
-import com.hotel_booking.server.Models.Types.AuthResponse;
-import com.hotel_booking.server.Models.Types.ChangePassword;
-import com.hotel_booking.server.Models.Types.Login;
-import com.hotel_booking.server.Models.Types.Register;
+import com.hotel_booking.server.Models.Types.*;
+import com.hotel_booking.server.Models.User;
 import com.hotel_booking.server.Services.AuthService;
+import com.hotel_booking.server.Services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserService userService;
 
     @PostMapping("/auth/register")
     public AuthResponse register(@RequestBody Register register) {
@@ -33,5 +33,10 @@ public class AuthController {
                 changePassword.getNewPassword(),
                 token.substring(7)
         );
+    }
+
+    @PutMapping("/auth/update")
+    public CommonResponse updateMyProfile(@RequestHeader("Authorization") String token,@RequestBody User user) throws Exception {
+        return userService.updateUser(user,token);
     }
 }
