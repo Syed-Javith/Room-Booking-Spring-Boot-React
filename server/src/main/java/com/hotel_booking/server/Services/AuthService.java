@@ -2,8 +2,7 @@ package com.hotel_booking.server.Services;
 
 
 import com.hotel_booking.server.Exceptions.UnauthorizedAccessException;
-import com.hotel_booking.server.Models.Enums.EmailBody;
-import com.hotel_booking.server.Models.Enums.EmailSubject;
+import com.hotel_booking.server.Models.Enums.EmailContent;
 import com.hotel_booking.server.Models.Enums.Role;
 import com.hotel_booking.server.Models.Types.AuthResponse;
 import com.hotel_booking.server.Models.Types.EmailDetails;
@@ -42,11 +41,11 @@ public class AuthService {
         emailService.sendSimpleMail(
                 new EmailDetails(
                         user.getUsername(),
-                        EmailBody.REGISTER_CONFIRMATION.getMessage().replace(
+                        EmailContent.REGISTER_CONFIRMATION.getSubject().replace(
                                 "[Guest Name]",
                                 user.getFirstName()+ " " + user.getLastName()
                         ),
-                        EmailSubject.REGISTER_CONFIRMATION.getMessage(),
+                        EmailContent.REGISTER_CONFIRMATION.getSubject(),
                         null
                 )
         );
@@ -85,8 +84,8 @@ public class AuthService {
         emailService.sendSimpleMail(
                 new EmailDetails(
                         username,
-                        EmailBody.PASSWORD_RESET.getMessage().replace("[Guest Name]",username),
-                        EmailSubject.PASSWORD_RESET.getMessage(),
+                        EmailContent.PASSWORD_RESET.getBody().replace("[Guest Name]",username),
+                        EmailContent.PASSWORD_RESET.getSubject(),
                         null
                 )
         );

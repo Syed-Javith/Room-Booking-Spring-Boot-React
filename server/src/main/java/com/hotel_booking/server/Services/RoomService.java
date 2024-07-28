@@ -4,8 +4,7 @@ import com.hotel_booking.server.Exceptions.MaxBookingReachedException;
 import com.hotel_booking.server.Exceptions.RoomAlreadyBookedException;
 import com.hotel_booking.server.Exceptions.RoomNotFoundException;
 import com.hotel_booking.server.Exceptions.UnauthorizedAccessException;
-import com.hotel_booking.server.Models.Enums.EmailBody;
-import com.hotel_booking.server.Models.Enums.EmailSubject;
+import com.hotel_booking.server.Models.Enums.EmailContent;
 import com.hotel_booking.server.Models.Room;
 import com.hotel_booking.server.Models.Types.EmailDetails;
 import com.hotel_booking.server.Models.User;
@@ -60,10 +59,10 @@ public class RoomService {
         emailService.sendSimpleMail(
                 new EmailDetails(
                         user.getUsername(),
-                        EmailBody.BOOKING_CONFIRMATION
-                                .getMessage()
+                        EmailContent.BOOKING_CONFIRMATION
+                                .getBody()
                                 .replace("[Guest Name]",user.getUsername()),
-                        EmailSubject.BOOKING_CONFIRMATION.getMessage()
+                        EmailContent.BOOKING_CONFIRMATION.getSubject()
                         ,null
                 )
         );
@@ -74,10 +73,10 @@ public class RoomService {
         emailService.sendSimpleMail(
                 new EmailDetails(
                         user.getUsername(),
-                        EmailBody.BOOKING_CANCEL
-                                .getMessage()
+                        EmailContent.BOOKING_CANCEL
+                                .getBody()
                                 .replace("[Guest Name]",user.getUsername()),
-                        EmailSubject.BOOKING_CANCEL.getMessage()
+                        EmailContent.BOOKING_CANCEL.getSubject()
                         ,null
                 )
         );
@@ -88,10 +87,10 @@ public class RoomService {
         emailService.sendSimpleMail(
                 new EmailDetails(
                         user.getUsername(),
-                        EmailBody.BOOKING_VACATED
-                                .getMessage()
+                        EmailContent.BOOKING_VACATED
+                                .getBody()
                                 .replace("[Guest Name]",user.getUsername()),
-                        EmailSubject.BOOKING_VACATED.getMessage()
+                        EmailContent.BOOKING_VACATED.getSubject()
                         ,null
                 )
         );
@@ -107,6 +106,14 @@ public class RoomService {
         bookingService.cancelBooking(user, room);
         room.setAvailable(true);
         room.setUser(null);
+        roomRepo.save(room);
+    }
+
+    public void suspendRoom(int roomId) {
+        Room room = roomRepo.findById(roomId).orElseThrow(
+                () -> new RoomNotFoundException("Room not found")
+        );
+        room.setAvailable(false);
         roomRepo.save(room);
     }
 }
