@@ -2,7 +2,9 @@ package com.hotel_booking.server.Models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.hotel_booking.server.Models.Enums.Role;
+import com.hotel_booking.server.Models.Types.BookingDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -34,6 +38,17 @@ public class User implements UserDetails {
     @ToString.Exclude
     @JsonProperty("roomId")
     private Room room;
+
+    @OneToMany( fetch = FetchType.EAGER , mappedBy = "user")
+    @JsonProperty("bookings")
+    private List<Booking> bookings;
+
+    @JsonProperty("bookings")
+    private List<BookingDto> getBookingDtos() {
+        return bookings.stream()
+                .map(booking -> new BookingDto(booking.getId(), booking.getBookingDate(), booking.getVacateDate(), booking.getAmount()))
+                .collect(Collectors.toList());
+    }
 
     @JsonProperty("roomId")
     public Integer getRoomId() {

@@ -1,6 +1,7 @@
 package com.hotel_booking.server.Services;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -26,7 +27,7 @@ public class JwtService {
     public String extractPassword(String token) {
         return null;
     }
-    public Claims extractAllClaims(String token) {
+    public Claims extractAllClaims(String token) throws ExpiredJwtException {
         return Jwts
                 .parser()
                 .setSigningKey(getKey())

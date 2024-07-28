@@ -59,7 +59,7 @@ public class RoomController {
     @PutMapping("/room/{roomId}/vacate")
     public void vacateRoom(@PathVariable Integer roomId) {
         User user = getCurrentUser();
-        roomService.cancelRoom(roomId, user);
+        roomService.vacateRoom(roomId, user);
     }
 
     private User getCurrentUser() {

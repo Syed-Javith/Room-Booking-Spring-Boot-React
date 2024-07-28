@@ -6,6 +6,8 @@ import com.hotel_booking.server.Models.Enums.RoomType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,8 +33,18 @@ public class Room {
     @JsonProperty("userId")
     private User user;
 
+    @OneToMany(mappedBy = "room")
+    @JsonProperty("bookings")
+    private List<Booking> bookings;
+
+    @JsonProperty("bookings")
+    private List<Booking> bookingBookings(){
+        return bookings;
+    }
+
     @JsonProperty("userId")
     public Integer getUserId() {
         return user != null ? user.getId() : null;
     }
+
 }

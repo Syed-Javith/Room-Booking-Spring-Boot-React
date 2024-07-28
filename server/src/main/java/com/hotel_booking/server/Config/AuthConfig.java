@@ -1,6 +1,5 @@
 package com.hotel_booking.server.Config;
 
-import com.hotel_booking.server.Models.Enums.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +11,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import static com.hotel_booking.server.Models.Enums.Role.*;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -30,7 +28,7 @@ public class AuthConfig {
                         auth
                                 .requestMatchers("/auth/**", "/hello/**")
                                 .permitAll()
-                                .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                                .requestMatchers("/admin/**","/mail/**").hasAuthority("ADMIN")
                                 .anyRequest()
                                 .authenticated()
                 )
