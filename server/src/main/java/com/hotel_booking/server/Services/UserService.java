@@ -7,8 +7,9 @@ import com.hotel_booking.server.Models.Types.EmailDetails;
 import com.hotel_booking.server.Models.User;
 import com.hotel_booking.server.Repository.UserRepo;
 import com.hotel_booking.server.Utils.Utils;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -23,11 +24,8 @@ public class UserService {
         this.emailService = emailService;
     }
 
-    public CommonResponse deleteUser(String username){
-        User user = userRepo.findByUsername(username).orElseThrow(
-                () -> new UsernameNotFoundException("No such user")
-        );
-        userRepo.delete(user);
+    public CommonResponse deleteUser(Integer userId){
+        userRepo.deleteById(userId);
         return new CommonResponse(200, "User deleted successfully");
     }
 
@@ -36,8 +34,28 @@ public class UserService {
         return new CommonResponse(200, "User added successfully");
     }
 
+    public List<User> getAllUsers(){
+        return userRepo.findAll();
+    }
+
+    public User getUser(Integer userId){
+        return userRepo.findById(userId).get();
+    }
+
     public CommonResponse updateUser(User user){
         userRepo.save(user);
+        emailService.sendSimpleMail(
+                new EmailDetails(
+                        user.getUsername(),
+                        Utils.replaceUserName(
+                                EmailContent.USER_DATA_UPDATED_BY_ADMIN.getBody()
+                                ,
+                                user.getFirstName()
+                        ),
+                        EmailContent.USER_DATA_UPDATED_BY_ADMIN.getSubject(),
+                        null
+                )
+        );
         return new CommonResponse(200, "User updated successfully");
     }
 

@@ -2,12 +2,9 @@ package com.hotel_booking.server.Services;
 
 import com.hotel_booking.server.Models.Types.EmailDetails;
 import java.io.File;
-//import javax.mail.MessagingException;
-//import javax.mail.internet.MimeMessage;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;

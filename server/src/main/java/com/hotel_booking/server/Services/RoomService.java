@@ -22,6 +22,10 @@ public class RoomService {
     private final BookingService bookingService;
     private final EmailService emailService;
 
+    public List<Room> getAllRooms() {
+        return roomRepo.findAll();
+    }
+
     public List<Room> getAllUnBookedRooms() {
         return roomRepo.getAllRooms();
     }

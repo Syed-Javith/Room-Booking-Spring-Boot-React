@@ -1,5 +1,6 @@
 package com.hotel_booking.server.Services;
 
+import com.hotel_booking.server.Exceptions.RoomNotFoundException;
 import com.hotel_booking.server.Models.Booking;
 import com.hotel_booking.server.Models.Room;
 import com.hotel_booking.server.Models.User;
@@ -29,8 +30,11 @@ public class BookingService {
     }
 
     public void cancelBooking(User user, Room room) {
-        Booking booking = bookingRepo.getBookingOfUserForTheRoom(user,room);
-        booking.setVacateDate(LocalDateTime.now());
-        bookingRepo.save(booking);
+        Booking booking = bookingRepo.getBookingOfUserForTheRoom(user.getId(),room.getRoomNumber());
+        if(booking != null) {
+            booking.setVacateDate(LocalDateTime.now());
+            bookingRepo.save(booking);
+        }
+        else throw new RoomNotFoundException("You have No bookings");
     }
 }
