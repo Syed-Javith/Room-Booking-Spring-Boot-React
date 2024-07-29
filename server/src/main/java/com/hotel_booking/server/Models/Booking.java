@@ -1,5 +1,6 @@
 package com.hotel_booking.server.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,12 +20,10 @@ public class Booking {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
     @JsonProperty("userId")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "room_id")
     @JsonProperty("roomId")
     private Room room;
 
@@ -33,12 +32,17 @@ public class Booking {
     private int amount;
 
     @JsonProperty("roomId")
-    private int getRoomId(){
+    private int getRoomId() {
         return room.getRoomNumber();
     }
 
     @JsonProperty("userId")
-    private int getUserId(){
+    private int getUserId() {
         return user.getId();
+    }
+
+    @Override
+    public String toString() {
+        return "Booking{id=" + id + ", bookingDate=" + bookingDate + ", vacateDate=" + vacateDate + ", amount=" + amount + '}';
     }
 }

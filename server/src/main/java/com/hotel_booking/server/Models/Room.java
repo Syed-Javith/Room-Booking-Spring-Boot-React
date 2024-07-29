@@ -3,6 +3,9 @@ package com.hotel_booking.server.Models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hotel_booking.server.Models.Enums.RoomType;
+import com.hotel_booking.server.Models.Types.BookingDto;
+import com.hotel_booking.server.Models.Types.ReviewDto;
+import com.hotel_booking.server.Utils.Utils;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,13 +26,11 @@ public class Room {
     private String description;
     private int floor;
     private boolean isAvailable;
-
     @Enumerated(EnumType.STRING)
     private RoomType roomType;
 
     @OneToOne
     @JoinColumn(name = "user_id")
-    @ToString.Exclude
     @JsonProperty("userId")
     private User user;
 
@@ -37,9 +38,14 @@ public class Room {
     @JsonProperty("bookings")
     private List<Booking> bookings;
 
+    @OneToMany(mappedBy = "room")
+    @JsonProperty("reviews")
+    @ToString.Exclude
+    private List<Review> reviews;
+
     @JsonProperty("bookings")
-    private List<Booking> bookingBookings(){
-        return bookings;
+    private List<BookingDto> bookingBookings() {
+        return Utils.getBookingDtoList(bookings);
     }
 
     @JsonProperty("userId")
@@ -47,4 +53,8 @@ public class Room {
         return user != null ? user.getId() : null;
     }
 
+    @JsonProperty("reviews")
+    public List<ReviewDto> getReviews() {
+        return Utils.getReviewDtoList(reviews);
+    }
 }

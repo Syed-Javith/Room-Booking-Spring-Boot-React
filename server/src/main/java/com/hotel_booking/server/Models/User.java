@@ -2,9 +2,9 @@ package com.hotel_booking.server.Models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.hotel_booking.server.Models.Enums.Role;
 import com.hotel_booking.server.Models.Types.BookingDto;
+import com.hotel_booking.server.Utils.Utils;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,9 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -39,15 +37,16 @@ public class User implements UserDetails {
     @JsonProperty("roomId")
     private Room room;
 
-    @OneToMany( fetch = FetchType.EAGER , mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     @JsonProperty("bookings")
     private List<Booking> bookings;
 
+    @OneToMany(mappedBy = "user")
+    private List<Review> reviews;
+
     @JsonProperty("bookings")
     private List<BookingDto> getBookingDtos() {
-        return bookings.stream()
-                .map(booking -> new BookingDto(booking.getId(), booking.getBookingDate(), booking.getVacateDate(), booking.getAmount()))
-                .collect(Collectors.toList());
+        return Utils.getBookingDtoList(bookings);
     }
 
     @JsonProperty("roomId")
@@ -72,21 +71,26 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "User{id=" + id + ", username='" + username + "', firstName='" + firstName + "', lastName='" + lastName + "', role=" + role + '}';
     }
 }
