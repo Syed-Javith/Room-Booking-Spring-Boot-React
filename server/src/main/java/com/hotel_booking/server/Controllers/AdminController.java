@@ -8,6 +8,8 @@ import com.hotel_booking.server.Services.RoomService;
 import com.hotel_booking.server.Services.UserService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping
 public class AdminController {
@@ -23,6 +25,11 @@ public class AdminController {
     @GetMapping("/admin")
     public String index(){
         return "Hello admin";
+    }
+
+    @GetMapping("/admin/room")
+    public List<Room> getRooms(){
+        return roomService.getAllRooms();
     }
 
     @GetMapping("/admin/room/{roomId}")
@@ -48,6 +55,17 @@ public class AdminController {
     @PutMapping("/admin/room/{roomId}/suspend")
     public void suspendRoom(@PathVariable Integer roomId) {
         roomService.suspendRoom(roomId);
+    }
+
+
+    @GetMapping("/admin/user")
+    public List<User> getUser() {
+        return userService.getAllUsers();
+    }
+
+    @GetMapping("/admin/user/{userId}")
+    public User getUserById(@PathVariable Integer userId) {
+        return userService.getUser(userId);
     }
 
     @PostMapping("admin/user/")
