@@ -2,6 +2,7 @@ package com.hotel_booking.server.Exceptions;
 
 import com.hotel_booking.server.Models.Types.ErrorResponse;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -50,8 +51,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<String> handleJwtException(JwtException e) {
+        return new ResponseEntity<>("JWT token error: " + e.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
     @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<ErrorResponse> handleJwtException(Exception ex) {
+    public ResponseEntity<ErrorResponse> handleJwtException(ExpiredJwtException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
                 ex.getMessage(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
